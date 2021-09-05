@@ -1,0 +1,117 @@
+package Merge;//全部默认升序
+import javax.lang.model.util.ElementScanner14;
+public class NaturalMerge
+{
+    private static Comparable[]aux;
+    public static void natrualMerge(Comparable[]a)
+    {
+        int begin=0;
+        int end=a.length;
+        while(!isSorted(a))
+        {
+            int []index=findSubArray(a);
+            merge(a, index[0], index[1], index[2], index[3]);
+        }
+    }
+    private static int[]findSubArray(Comparable[]a)//找两个有序子数组
+    {
+        int []index1=find(a,0,a.length);
+        int []index2=find(a,index1[1],a.length);
+        int[]index=new int[4];
+        index[0]=index1[0];
+        index[1]=index1[1];
+        index[2]=index2[0];
+        index[3]=index2[1];
+        return index;
+    }
+    private static boolean isSame(int[]index1,int[]index2)//判断有序子数组是否相同
+    {
+        if(index1.length!=index2.length)
+        return false;
+        else
+        for(int i=0;i<index1.length;i++)
+        {
+            if(index1[i]!=index2[i])
+            return false;
+        }
+        return true;
+    }
+    private static int[]find(Comparable[]a,int begin,int end)//找有序子数组
+    {
+        for(int i=begin;i<end;i++)
+        {
+        if(less(a[i+1],a[i]))
+        {  int beg=i;
+        while(less(a[i+1],a[i]))i++;
+        int en=i;
+        int []sub=new int[2];
+        sub[0]=beg;
+        sub[1]=en;
+        return sub;
+        }
+        else
+        if(less(a[i],a[i+1]))
+        {
+            int beg=i;
+            while(less(a[i],a[i+1]))i++;
+            int en=i;
+            int []sub=new int[2];
+            sub[0]=beg;
+            sub[1]=en;
+            return sub;
+        }
+        }
+        return new int[1];//肯定是能够返回一个长度至少为二的数组的；
+    }
+    private static void merge(Comparable[]a,int begin1,int end1,int begin2,int end2)
+    {
+        aux=new Comparable[Math.max(end1, end2)];
+       for(int i=begin1;i<end1;i++)
+       aux[i]=a[i];
+       for(int i=begin2;i<end2;i++)
+       aux[i]=a[i];
+        if(less(a[end2],a[begin1]))
+        {
+           if((end1-begin1)>(end2-begin2))
+           {
+            int length=end1-begin1;//步长；
+            Comparable[]temp=new Comparable[end1-begin1];
+            for(int i=begin1,j=0;i<end1;i++)
+            temp[j]=a[i];
+            for(int i=begin1;i<end2;i++)
+            a[i-length]=a[i];
+            for(int i=begin1+end2-begin2,j=0;i<end2;i++)
+            a[i]=temp[j];
+           }
+        }
+        if(less(a[end1],a[begin2]))
+        return;
+        else 
+        {
+            for(int k=0,i=begin1,j=begin2;k<aux.length;k++)
+            {
+                if(i>=end1)a[j++]=aux[k];
+                else if(j>=end2)a[i++]=aux[k];
+                else if(less(aux[j],aux[i])&&j>i)a[i++]=aux[j];
+                else if(less(aux[i],aux[j])&&i>j)a[j++]=aux[i];
+                else 
+                {if(k<end1&&k>=begin1)
+                    a[i]=aux[k];
+                    if(k<end2&&k>=begin2)
+                    a[j]=aux[k];
+                }
+        }
+        }
+    }
+    private static boolean isSorted(Comparable[]a)//默认升序排列
+    {
+        for(int i=0;i<a.length;i++)
+        if(less(a[i+1],a[i]))
+        return false;
+         return true;
+    }
+    private static boolean less(Comparable lh,Comparable rh)
+{
+    return lh.compareTo(rh)<0;
+}
+}
