@@ -1,0 +1,60 @@
+package Merge;
+public class SubLinear
+/**全部都是用的左开右闭区间*/
+{
+    private static  int findCofactor(int n)/**记住要所有的路径都得有返回值 */
+    {
+        for (int i=2;i<n;i++)
+        if(n%i==0)
+        return i;
+        else
+        return 1;
+        return 1;
+    }
+    private static void sort(Comparable[]a,int low,int high)/**selection_sort */
+    {
+        int indexMin=0;
+        for(int i=low;i<high-1;i++)
+        {
+            indexMin=i;
+        for(int j=i;j<high;j++)
+        if(less(a[j],a[i]))
+        indexMin=j;
+        Comparable temp=a[i];
+        a[i]=a[indexMin];
+        a[indexMin]=temp;
+        }
+        
+    }
+    public static void  merge(Comparable[]a,Comparable[]aux,int low,int mid,int high)
+    {
+         int NA=findCofactor(high-low);
+        int i=low;
+        int j=mid+1;
+        for(;i<high;i+=NA)
+        {
+            sort(a,i,i+NA);
+        }
+        for(int k=low;k<high;k++)
+        aux[k]=a[k];
+        for(int k=low;k<high;k++)
+        if(i>mid)a[k]=aux[j++];
+        else if(j>high)a[k]=aux[i++];
+        else if(less(aux[j],aux[i]))a[k]=aux[j++];
+        else a[k]=aux[i++];
+    }
+private static boolean less(Comparable lh,Comparable rh)
+{
+    return lh.compareTo(rh)<0;
+}
+public static Comparable[] sort(Comparable[]a,int low)
+{
+    Comparable []aux=new Comparable[a.length];
+    int high=a.length+low-1;
+    for(int i=low;i<high;i++)
+    aux[i]=a[i];
+    int mid=(low+high)/2;
+    merge(a,aux,low,mid,high);
+    return a;
+}
+}
