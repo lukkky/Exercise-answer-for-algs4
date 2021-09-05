@@ -1,0 +1,35 @@
+package Merge;
+public class  MergeBUSorted
+{
+public static Comparable[]mergeBUSorted(Comparable[]a)
+{
+    int change=0;//用来记录交换的次数；
+    int i=0;//记录比较的对数；
+    while(change!=0||i<a.length-1)
+    {
+    if(less(a[1],a[0]))
+        {Comparable temp=a[0];       
+        a[0]=a[1];
+        a[1]=temp;
+        change++;
+        }
+        addBack(a, 0, 1);
+        i++;
+    }
+    return a; 
+}
+private static boolean less(Comparable lh,Comparable rh)
+{
+    return lh.compareTo(rh)<0;
+}
+private static void addBack(Comparable[]a,int indexBe,int indexAf)
+{
+    Comparable tempBe=a[indexBe];
+    Comparable tempAf=a[indexAf];
+    int i=0;
+    for(i=indexAf+1;i<a.length;i++)
+    a[i-2]=a[i];
+    a[i-2]=tempBe;/**i退出的时候是length； */
+    a[i-1]=tempAf;
+}
+}
